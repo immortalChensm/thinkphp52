@@ -12,3 +12,4 @@
 // 应用公共文件
 
 //echo 'common.php is running';
+
