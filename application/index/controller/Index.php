@@ -25,10 +25,11 @@ class Index
 //        echo $user->save();
 
 
-        $container = new App();
-        //print_r($container);
-        foreach ($container as $v){
-            print_r($v);
-        }
+//        $container = new App();
+//        //print_r($container);
+//        foreach ($container as $v){
+//            print_r($v);
+//        }
+        return 'hi';
     }
 }

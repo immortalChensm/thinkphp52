@@ -67,12 +67,17 @@ echo PHP_EOL;
 //echo 'ok';
 
 
-$url = "http://waseeo.com/index.php/Home/Index/SendSMS.html";
+//$url = "http://waseeo.com/index.php/Home/Index/SendSMS.html";
+//
+//while(1){
+//    $result = file_get_contents($url);
+//    print_r($result);
+//}
 
+$a = "b.txt";
 while(1){
-    $result = file_get_contents($url);
-    print_r($result);
+    echo file_get_contents($a);
+    sleep(2);
 }
-
 
 

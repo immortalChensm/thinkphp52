@@ -260,10 +260,19 @@ think\App::class
   ![route-check](images/web/routecheck3.png) 
   
 运行应用【中间件调度】  
+
 ```php 
 $this->middleware->add(function (Request $request, $next) use ($dispatch, $data) {
             return is_null($data) ? $dispatch->run() : $data;
         });
 
         $response = $this->middleware->dispatch($this->request);
-```
+```  
+ ![dispatcher with middleware](images/web/dispatcher1.png) 
+ ![dispatcher with middleware](images/web/dispatcher2.png) 
+ ![dispatcher with middleware](images/web/dispatcher3.png) 
+ ![dispatcher with middleware](images/web/middleware1.png) 
+ ![dispatcher with middleware](images/web/middleware2.png)   
+ 
+ 路由调度   
+  ![dispatcher with middleware](images/web/dispatcher4.png) 
