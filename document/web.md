@@ -275,4 +275,105 @@ $this->middleware->add(function (Request $request, $next) use ($dispatch, $data)
  ![dispatcher with middleware](images/web/middleware2.png)   
  
  路由调度   
-  ![dispatcher with middleware](images/web/dispatcher4.png) 
+  ![dispatcher with middleware](images/web/dispatcher4.png)   
+  
+ PS:路由检查套路  
+ 1、路由池里RouteGroup里查  
+ ![route check](images/web/routecheck4.png)     
+ 具体套路   
+  ![route check](images/web/routecheck6.png)     
+  ![route check](images/web/routecheck7.png)     
+  ![route check](images/web/routecheck8.png)     
+  ![route check](images/web/routecheck9.png)     
+  ![route check](images/web/routecheck10.png)     
+  ![route check](images/web/routecheck11.png)     
+  ![route check](images/web/routecheck12.png)     
+  ![route check](images/web/routecheck13.png)     
+  ![route check](images/web/routecheck14.png)     
+  ![route check](images/web/routecheck15.png)     
+  ![route check](images/web/routecheck16.png)     
+ 2、pathinfo默认常规的检查  
+ ![route check](images/web/routecheck5.png)     
+ 
+ 3、路由检查结束后返回以下这结果   
+ ![route check](images/web/routecheck17.png)   
+ 
+ 接着路由调度  
+ 根据路由检查结果，它支持匿名函数，控制器，模块，跳转，重定向，响应，url,view   
+ 这些骚操作   
+ 
+ 他们都继承基类Dispatch，根据路由结果运行不同的子类【调度模块】  
+ ![dispatcher](images/web/dispatcher5.png)   
+ 假设是路由到：模块/控制器/方法    
+ 那么它会解析保存module/controller/action在该模块调度器里   
+ ![dispatcher](images/web/dispatcher6.png)     
+ 
+ 模块/控制器/方法 运行如下代码   
+ ```php 
+ public function exec()
+     {
+         // 监听module_init
+         $this->app['hook']->listen('module_init');
+ 
+         try {
+             // 实例化控制器
+             $instance = $this->app->controller($this->controller,
+                 $this->rule->getConfig('url_controller_layer'),
+                 $this->rule->getConfig('controller_suffix'),
+                 $this->rule->getConfig('empty_controller'));
+         } catch (ClassNotFoundException $e) {
+             throw new HttpException(404, 'controller not exists:' . $e->getClass());
+         }
+ 
+         //以中间件形式添加
+         $this->app['middleware']->controller(function (Request $request, $next) use ($instance) {
+             // 获取当前操作名
+             $action = $this->actionName . $this->rule->getConfig('action_suffix');
+ 
+             if (is_callable([$instance, $action])) {
+                 // 执行操作方法
+                 $call = [$instance, $action];
+ 
+                 // 严格获取当前操作方法名
+                 $reflect    = new ReflectionMethod($instance, $action);
+                 $methodName = $reflect->getName();
+                 $suffix     = $this->rule->getConfig('action_suffix');
+                 $actionName = $suffix ? substr($methodName, 0, -strlen($suffix)) : $methodName;
+                 $this->request->setAction($actionName);
+ 
+                 // 自动获取请求变量
+                 $vars = $this->rule->getConfig('url_param_type')
+                 ? $this->request->route()
+                 : $this->request->param();
+                 $vars = array_merge($vars, $this->param);
+             } elseif (is_callable([$instance, '_empty'])) {
+                 // 空操作
+                 $call    = [$instance, '_empty'];
+                 $vars    = [$this->actionName];
+                 $reflect = new ReflectionMethod($instance, '_empty');
+             } else {
+                 // 操作不存在
+                 throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $action . '()');
+             }
+ 
+             $this->app['hook']->listen('action_begin', $call);
+ 
+             //$instance 控制器实例
+             //$reflect 反射的控制器方法实例
+             $data = $this->app->invokeReflectMethod($instance, $reflect, $vars);
+ 
+             //echo "run here";
+             return $this->autoResponse($data);
+         });
+ 
+         //运行刚才添加好的破函数
+         return $this->app['middleware']->dispatch($this->request, 'controller');
+     }
+ ```   
+在运行的过程中，我们还看到这家伙还触发了钩子事件     
+运行完控制器后触发app_end 钩子   
+ ![dispatcher](images/web/end.png)     
+ 
+ 响应结束   
+  ![dispatcher](images/web/response.png)  
+ 
