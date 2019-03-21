@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use app\common\model\User;
 use think\App;
+use think\Db;
 
 class Index
 {
@@ -30,6 +31,7 @@ class Index
 //        foreach ($container as $v){
 //            print_r($v);
 //        }
-        return 'hi';
+        //return 'hi';
+        Db::table();
     }
 }
