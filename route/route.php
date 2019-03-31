@@ -14,7 +14,7 @@ Route::get('think', function () {
 });
 
 Route::get('hello/:name', 'index/hello');
-Route::get('jack', 'index/Index/test');
+//Route::get('jack', 'index/Index/test');
 
 return [
 

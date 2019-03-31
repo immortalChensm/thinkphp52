@@ -32,6 +32,7 @@ class Index
 //            print_r($v);
 //        }
         //return 'hi';
-        Db::table();
+        //Db::table();
+        return \app\index\model\User::get();
     }
 }
