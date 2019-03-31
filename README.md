@@ -6,3 +6,4 @@
 - [thinkphp DB说明注解](document/db.md)
 - [thinkphp 自动加载注解](document/loader.md)
 - [thinkphp 数据库详细注解](document/database.md)
+- [thinkphp ORM注解](document/orm.md)
