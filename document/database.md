@@ -244,5 +244,12 @@ protected function getResult($pdo = false, $procedure = false)
 yield 会返回一个生成器对象给循环进行迭代处理，yield循环【读取一次后会暂停并返回数据】  
 处理fetch返回后，$result变量内存清空，当第二次循环时，再读取数据放入$result，同样返回   
 结果，再清空$result   
-而不像数组那样连续占用大量的内存!!!
+而不像数组那样连续占用大量的内存!!!   
+这也是一次性处理亿级数据的原因！！！一些小公司喜欢问这种面试题！  
+部分例子源码位于
+[yield1](../yield1.php)
+[yield2](../yield2.php)
+[yield3](../yield3.php)
+[yield4](../yield4.php)  
+[yield 生成器](https://www.php.net/manual/zh/language.generators.syntax.php) 
 
