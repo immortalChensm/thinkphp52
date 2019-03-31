@@ -187,3 +187,62 @@ protected function getResult($pdo = false, $procedure = false)
 - 数据库cursor生成器查询   
 [curosr](https://www.kancloud.cn/manual/thinkphp5_1/354000)  
 [yield生成器](https://www.php.net/manual/zh/language.generators.overview.php)   
+[yield 生成器内存优化利器](https://www.php.net/manual/zh/language.generators.syntax.php) 
+
+![curosr](images/database/yield1.png)
+```php 
+  public function getCursor($sql, $bind = [], $master = false, $model = null, $condition = null, $relation = null)
+    {
+        $this->initConnect($master);
+
+        // 记录SQL语句
+        $this->queryStr = $sql;
+
+        $this->bind = $bind;
+
+        Db::$queryTimes++;
+
+        // 调试开始
+        $this->debug(true);
+
+        // 预处理
+        $this->PDOStatement = $this->linkID->prepare($sql);
+
+        // 是否为存储过程调用
+        $procedure = in_array(strtolower(substr(trim($sql), 0, 4)), ['call', 'exec']);
+
+        // 参数绑定
+        if ($procedure) {
+            $this->bindParam($bind);
+        } else {
+            $this->bindValue($bind);
+        }
+
+        // 执行查询
+        $this->PDOStatement->execute();
+
+        // 调试结束
+        $this->debug(false, '', $master);
+
+        // 返回结果集
+        while ($result = $this->PDOStatement->fetch($this->fetchType)) {
+            if ($model) {
+                $instance = $model->newInstance($result, $condition);
+
+                if ($relation) {
+                    $instance->relationQuery($relation);
+                }
+
+                yield $instance;
+            } else {
+                yield $result;
+            }
+        }
+    }
+```   
+
+yield 会返回一个生成器对象给循环进行迭代处理，yield循环【读取一次后会暂停并返回数据】  
+处理fetch返回后，$result变量内存清空，当第二次循环时，再读取数据放入$result，同样返回   
+结果，再清空$result   
+而不像数组那样连续占用大量的内存!!!
+
