@@ -174,4 +174,16 @@ protected function getResult($pdo = false, $procedure = false)
 
         return $result;
     }
-```
+```    
+
+- `Db::table('think_user')->where('id',1)->find();` 的操作流程   
+[thinkphp手册](https://www.kancloud.cn/manual/thinkphp5/135176)  
+![table](images/database/table1.png)
+![table](images/database/table2.png)
+![table](images/database/table3.png)
+![table](images/database/table4.png)
+![table](images/database/table5.png)   
+
+- 数据库cursor生成器查询   
+[curosr](https://www.kancloud.cn/manual/thinkphp5_1/354000)  
+[yield生成器](https://www.php.net/manual/zh/language.generators.overview.php)   
