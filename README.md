@@ -5,3 +5,4 @@
 - [thinkphp 控制器的运行说明注解](document/controller.md)
 - [thinkphp DB说明注解](document/db.md)
 - [thinkphp 自动加载注解](document/loader.md)
+- [thinkphp 数据库详细注解](document/database.md)
