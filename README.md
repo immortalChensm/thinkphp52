@@ -4,3 +4,4 @@
 - [thinkphp web应用流程阅读注解](document/web.md)
 - [thinkphp 控制器的运行说明注解](document/controller.md)
 - [thinkphp DB说明注解](document/db.md)
+- [thinkphp 自动加载注解](document/loader.md)
