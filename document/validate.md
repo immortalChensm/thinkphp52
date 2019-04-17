@@ -1,7 +1,7 @@
 ### tp validate demo
 - how to validate
 read thinkphp framework source code then know about it how is work
-and notedown workflow annotation
+and writedown workflow annotation
 
 finish your works then use git tool commit your change 
 
