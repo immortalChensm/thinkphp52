@@ -39,3 +39,5 @@ echo (memory_get_peak_usage(true)/1024/1024)."MB";
 echo PHP_EOL;
 $end = microtime_float();
 echo $end-$start."秒";
+echo $end."秒";
+echo $start."秒";
